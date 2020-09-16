@@ -1,6 +1,5 @@
-from graphene import List, Field, Int, String
+import graphene
 from graphene_django import DjangoObjectType, DjangoListField
-
 from .models import Workshop
 
 
@@ -9,5 +8,5 @@ class WorkshopType(DjangoObjectType):
         model = Workshop
 
 
-class Query(object):
+class Query(graphene.ObjectType):
     workshop = DjangoListField(WorkshopType)
