@@ -19,6 +19,49 @@ class Query(graphene.ObjectType):
         return None
 
 
+class WorkshopInput(graphene.InputObjectType):
+    name = graphene.String()
+    description = graphene.String()
+    image = graphene.String()
+    price = graphene.Int()
+
+# EVIIIILLLLLLLLLLL
+# class AddWorkshopMutation(graphene.Mutation):
+#     class Arguments:
+#         input = WorkshopInput(required=True)
+
+#     workshop = graphene.Field(WorkshopType)
+
+#     @staticmethod
+#     def mutate(root, info, input=None):
+#         workshop = Workshop(
+#             name=input.name,
+#             description=input.description,
+#             image=input.image,
+#             price=input.price)
+#         workshop.save()
+#         return AddWorkshop(workshop=workshop)
+
+
+class AddWorkshopMutation(graphene.Mutation):
+    class Arguments:
+        name = graphene.String()
+        description = graphene.String()
+        image = graphene.String()
+        price = graphene.Int()
+
+    workshop = graphene.Field(WorkshopType)
+
+    def mutate(self, info, name, description, image, price):
+        workshop = Workshop(
+            name=name,
+            description=description,
+            image=image,
+            price=price)
+        workshop.save()
+        return AddWorkshopMutation(workshop=workshop)
+
+
 class EditWorkshopMutation(graphene.Mutation):
     class Arguments:
         # The input arguments for this mutation
