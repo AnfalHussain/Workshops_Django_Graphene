@@ -6,4 +6,8 @@ class Query(workshops_api.schema.Query, graphene.ObjectType):
     pass
 
 
-schema = graphene.Schema(query=Query)
+class Mutation(graphene.ObjectType):
+    update_workshop = graphene.Field(workshops_api.schema.EditWorkshopMutation)
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
