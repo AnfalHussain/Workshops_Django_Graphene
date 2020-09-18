@@ -14,7 +14,7 @@ class Query(graphene.ObjectType):
 
     def resolve_workshop_by_name(self, info, name):
         if name is not None:
-            return Workshop.objects.get(name=name)
+            return Workshop.objects.all(name=name)
 
         return None
 
@@ -84,3 +84,16 @@ class EditWorkshopMutation(graphene.Mutation):
         workshop.save()
         # Notice we return an instance of this mutation
         return EditWorkshopMutation(workshop=workshop)
+
+
+class DeleteWorkshopMutation(graphene.Mutation):
+    ok = graphene.Boolean()
+
+    class Arguments:
+        id = graphene.ID()
+
+    @classmethod
+    def mutate(cls, root, info, **kwargs):
+        obj = Workshop.objects.get(pk=kwargs["id"])
+        obj.delete()
+        return cls(ok=True)
