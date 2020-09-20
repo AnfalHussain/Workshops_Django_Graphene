@@ -9,7 +9,7 @@ class WorkshopType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    workshop = DjangoListField(WorkshopType)
+    workshops = DjangoListField(WorkshopType)
     workshop_by_name = graphene.Field(WorkshopType, name=graphene.String())
 
     def resolve_workshop_by_name(self, info, name):
