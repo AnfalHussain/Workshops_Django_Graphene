@@ -36,16 +36,42 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',  # Required for GraphQL
     'corsheaders',
     'graphene_django',
+    "graphql_auth",
     'workshops_api',
+    'users',
     'phonenumber_field',
+    'django_filters',
 
 ]
+# Added to handle Authentication using CustomUser Model
+AUTH_USER_MODEL = 'users.CustomUser'
+
+# Configuration is made from a single Django setting named GRAPHQL_AUTH.
+GRAPHQL_AUTH = {
+    'LOGIN_ALLOWED_FIELDS': ['email', 'username'],
+    # ...
+}
 
 GRAPHENE = {
-    'SCHEMA': 'workshops.schema.schema'  # Where your Graphene schema lives
+    'SCHEMA': 'workshops.schema.schema',  # Where your Graphene schema lives
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
+}
+# Added to handle Authentication using graphql
+AUTHENTICATION_BACKENDS = [
+    "graphql_auth.backends.GraphQLAuthBackend",
+]
+# Added to handle Authentication using graphql
+
+GRAPHQL_JWT = {
+    "JWT_VERIFY_EXPIRATION": True,
+
+    # optional
+    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
 }
 
 MIDDLEWARE = [

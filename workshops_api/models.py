@@ -1,7 +1,7 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import RegexValidator, MinValueValidator
-from django.contrib.auth.models import User
+from users.models import CustomUser
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
@@ -38,7 +38,7 @@ class Profile(models.Model):
     ]
 
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name='profile')
+        CustomUser, on_delete=models.CASCADE, related_name='profile')
     first_name = models.CharField(max_length=150, null=True)
     middle_name = models.CharField(max_length=150, null=True)
     last_name = models.CharField(max_length=150, null=True)
@@ -72,7 +72,7 @@ class Profile(models.Model):
     #         return self.user.username
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=CustomUser)
 def create_profile(sender, instance, created, **kwargs):
     if created and instance.is_staff == False:
         Profile.objects.create(user=instance)
@@ -86,7 +86,7 @@ class Registration(models.Model):
     ]
 
     customer = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='registrations')
+        CustomUser, on_delete=models.CASCADE, related_name='registrations')
     total = models.DecimalField(max_digits=8, decimal_places=3, validators=[
                                 MinValueValidator(0.0)])
     payment_status = models.CharField(

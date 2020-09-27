@@ -11,10 +11,17 @@ class WorkshopType(DjangoObjectType):
 class Query(graphene.ObjectType):
     workshops = DjangoListField(WorkshopType)
     workshop_by_name = graphene.Field(WorkshopType, name=graphene.String())
+    workshop_by_id = graphene.Field(WorkshopType, id=graphene.Int())
 
     def resolve_workshop_by_name(self, info, name):
         if name is not None:
             return Workshop.objects.all(name=name)
+
+        return None
+
+    def resolve_workshop_by_id(self, info, id):
+        if id is not None:
+            return Workshop.objects.get(pk=id)
 
         return None
 
@@ -53,6 +60,8 @@ class AddWorkshopMutation(graphene.Mutation):
     workshop = graphene.Field(WorkshopType)
 
     def mutate(self, info, name, description, image, price):
+        print("name, description, image, price",
+              name, description, image, price)
         workshop = Workshop(
             name=name,
             description=description,
