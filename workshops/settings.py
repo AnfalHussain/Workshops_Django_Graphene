@@ -63,6 +63,8 @@ GRAPHENE = {
 }
 # Added to handle Authentication using graphql
 AUTHENTICATION_BACKENDS = [
+    # required for django admin site login
+    'django.contrib.auth.backends.ModelBackend',
     "graphql_auth.backends.GraphQLAuthBackend",
 ]
 # Added to handle Authentication using graphql
